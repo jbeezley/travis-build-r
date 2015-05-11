@@ -13,5 +13,9 @@ python:
 install:
   - curl http://lib.stat.cmu.edu/R/CRAN/src/base/R-3/R-3.2.0.tar.gz | tar zx
   - cd R-3.2.0
-  - ./configure --prefix=$HOME/R
-  - make && make install
+  - ./configure --prefix=$HOME/local
+  - make
+  - make install
+
+script:
+  - R --version
