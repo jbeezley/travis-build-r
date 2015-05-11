@@ -1,0 +1,12 @@
+language: python
+
+sudo: false
+
+python:
+  - "2.7"
+
+install:
+  - curl http://lib.stat.cmu.edu/R/CRAN/src/base/R-3/R-3.2.0.tar.gz | tar zx -
+  - cd R-3.2.0
+  - ./configure --prefix=$HOME/R
+  - make && make install
