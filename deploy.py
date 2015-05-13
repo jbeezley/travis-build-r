@@ -11,7 +11,7 @@ name = os.environ['name']
 version = os.environ['version']
 url = os.environ['url']
 prefix = os.path.join(home, os.environ['prefix'])
-env = open('env').readlines()
+env = [l.strip() for l in open('env').readlines() if l.strip()]
 
 girder_url = os.environ['GIRDER_URL'].rstrip('/')
 girder_user = os.environ['GIRDER_USER']

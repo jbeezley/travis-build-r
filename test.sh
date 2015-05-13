@@ -1,1 +1,2 @@
+source ./env
 R --version

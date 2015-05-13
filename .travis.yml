@@ -13,8 +13,7 @@ install:
   - ./build.sh
 
 script:
-  - . env
-  - . test.sh
+  - ./test.sh
 
 after_success:
   - ./package.sh
