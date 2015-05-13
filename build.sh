@@ -1,5 +1,5 @@
 set -e -x
-pushd "$name"
+pushd "$srcpath"
 ./configure "--prefix=$HOME/$prefix"
 make
 make check
