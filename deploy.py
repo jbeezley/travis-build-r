@@ -18,6 +18,8 @@ girder_user = os.environ['GIRDER_USER']
 girder_password = os.environ['GIRDER_PASSWORD']
 girder_folder = os.environ['GIRDER_FOLDER']
 
+chunk_size = 1024 * 1024 * 64
+
 token = requests.get(
     girder_url + '/user/authentication',
     auth=(girder_user, girder_password)
@@ -43,3 +45,33 @@ assert requests.put(
         'env': env
     })
 ).ok
+
+with open('package.tar.bz2') as f:
+    size = os.path.getsize('package.tar.bz2')
+
+    id = requests.post(
+        girder_url + '/file',
+        params={
+            'parentType': 'item',
+            'parentId': item,
+            'name': name + '_' + version + '.tar.bz2',
+            'size': size
+        }
+    ).json()['_id']
+
+    next_size = min(chunk_size, size)
+    while next_size > 0:
+        chunk = f.read(next_size)
+
+        assert requests.post(
+            girder_url + '/file/chunk',
+            params={
+                'offset': f.tell(),
+                'uploadId': id
+            },
+            files={
+                'chunk': chunk
+            }
+        ).ok
+
+        next_size = min(chunk_size, size - f.tell())
