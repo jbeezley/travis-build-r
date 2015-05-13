@@ -60,20 +60,29 @@ with open('package.tar.bz2') as f:
         }
     ).json()['_id']
 
+    print('Uploading file ' + id)
+
     next_size = min(chunk_size, size)
     while next_size > 0:
+        offset = f.tell()
         chunk = f.read(next_size)
 
-        assert requests.post(
+        print(
+            'Uploading ' + str(next_size) + ' bytes at ' + str(f.tell())
+        )
+        r = requests.post(
             girder_url + '/file/chunk',
             params={
                 'token': token,
-                'offset': f.tell(),
+                'offset': offset,
                 'uploadId': id
             },
             files={
                 'chunk': chunk
             }
-        ).ok
+        )
+
+        if not r.ok:
+            raise Exception(r.content.encode('utf-8'))
 
         next_size = min(chunk_size, size - f.tell())
