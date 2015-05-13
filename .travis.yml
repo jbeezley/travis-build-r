@@ -26,5 +26,8 @@ env:
     - srcpath=R-3.2.0
     - name=R
     - version=3.2.0
-    - "url=http://lib.stat.cmu.edu/R/CRAN/src/base/R-3/R-3.2.0.tar.gz"
-    - secure
+    - url=http://lib.stat.cmu.edu/R/CRAN/src/base/R-3/R-3.2.0.tar.gz
+    - GIRDER_URL=https://data.kitware.com/api/v1
+    - GIRDER_USER=travis-packages
+    - GIRDER_FOLDER=55535d828d777f082b592f55
+    - secure: "uAwr20wMruqDmXZ0lt1TDZXtGu7111ymyJXNkR6EhEVQbJ99Z7TWi+tOFOhqY4yux5HnJw4Umm7DVqs1yN8pvfmh5knJ0L7uCtr2WWQPw5oIkqp/e0xH+jxopDKuXAhaw7j3HrJDl8rowHcwX6Ta41TEAC/CkD2sM0uiQ7LJ457BxMtElCmRp25vfues0wTslfVSDoxahu/pbLQsnlUI4Q2xB3l7CTNmimDo1cweyFHOWD2iM5f/PxitfMqEtS9szBv+xGOg42pMnPjzNFn/RezYAYFedBOrnp7Lg/pUmUGtlmTCVem+MtWoWwUJdpZyxor0VyKalbpbtQBLUW1o6wxXroH+S1Al/PP5VpOxVq6fx6XY4gSHXpt5rk80y40QUvntbJqtMhJZVYfzDuCZJmnQWxk4zOIPswDhIwK662hSEZgJCP4q51U8u52Z2YFh7qnGFdGSY9Q8iVpIEndSIQ/E4mo9yevsTd6+L2YSggftFCRwFC0ltNKPu0p2NWWQsEtLm6K2xMK69fAVofNE9izIbwhG7hDWs6D57fmFk/+cyK7UJfqAAblr0zbcAvLfbBdKXSaSkS7WZ22pr2aVdze8pSbRMUvlHmTaGu5iRA7tv5M+Rdl6G+65ljyWserm2GKWjumUQ9p/7qWtTSFF5gjlR9wK//lt1PKyFG/Rg3M="
