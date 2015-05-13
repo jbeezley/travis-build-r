@@ -1,21 +1,30 @@
-language: python
+language: c
 
 sudo: false
 
 addons:
   apt:
     packages:
+      - python-virtualenv
       - gfortran
 
-python:
-  - "2.7"
-
 install:
-  - curl http://lib.stat.cmu.edu/R/CRAN/src/base/R-3/R-3.2.0.tar.gz | tar zx
-  - cd R-3.2.0
-  - ./configure --prefix=$HOME/local
-  - make
-  - make install
+  - ./setup.sh
+  - ./build.sh
 
 script:
-  - R --version
+  - . env
+  - . test.sh
+
+after_success:
+  - ./package.sh
+  - ./pyenv/bin/python deploy.py
+
+env:
+  global:
+    - prefix=local
+    - srcpath=R-3.2.0
+    - name=R
+    - version=3.2.0
+    - "url=http://lib.stat.cmu.edu/R/CRAN/src/base/R-3/R-3.2.0.tar.gz"
+    - secure
