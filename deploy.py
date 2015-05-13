@@ -52,6 +52,7 @@ with open('package.tar.bz2') as f:
     id = requests.post(
         girder_url + '/file',
         params={
+            'token': token,
             'parentType': 'item',
             'parentId': item,
             'name': name + '_' + version + '.tar.bz2',
@@ -66,6 +67,7 @@ with open('package.tar.bz2') as f:
         assert requests.post(
             girder_url + '/file/chunk',
             params={
+                'token': token,
                 'offset': f.tell(),
                 'uploadId': id
             },
