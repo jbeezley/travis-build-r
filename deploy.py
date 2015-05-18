@@ -42,7 +42,7 @@ assert requests.put(
         'version': version,
         'source': url,
         'prefix': prefix,
-        'env': env
+        'env': '\n'.join(env)
     })
 ).ok
 
