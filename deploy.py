@@ -1,4 +1,5 @@
 import os
+import sys
 import json
 
 import pip
@@ -9,7 +10,7 @@ from yaml import load
 
 if os.environ.get('TRAVIS_SECURE_ENV_VARS') == 'false':
     print('Cannot deploy without secure variables')
-    return
+    sys.exit(0)
 
 travis = load(open('.travis.yml').read())
 apt = travis.get('addons', {}).get('apt', {}).get('packages', [])
