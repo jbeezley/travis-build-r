@@ -13,6 +13,10 @@ url = os.environ['url']
 prefix = os.path.join(home, os.environ['prefix'])
 env = [l.strip() for l in open('env').readlines() if l.strip()]
 
+if os.environ.get('TRAVIS_SECURE_ENV_VARS') == 'false':
+    print('Cannot deploy without secure variables')
+    return
+
 girder_url = os.environ['GIRDER_URL'].rstrip('/')
 girder_user = os.environ['GIRDER_USER']
 girder_password = os.environ['GIRDER_PASSWORD']
@@ -41,7 +45,10 @@ assert requests.put(
         'name': name,
         'version': version,
         'source': url,
-        'prefix': prefix
+        'prefix': prefix,
+        'repo': os.environ.get('TRAVIS_REPO_SLUG'),
+        'head': os.environ.get('TRAVIS_COMMIT'),
+        'job_number': os.environ.get('TRAVIS_JOB_NUMBER')
     })
 ).ok
 
