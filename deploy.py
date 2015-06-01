@@ -41,8 +41,7 @@ assert requests.put(
         'name': name,
         'version': version,
         'source': url,
-        'prefix': prefix,
-        'env': '\n'.join(env)
+        'prefix': prefix
     })
 ).ok
 
@@ -68,7 +67,7 @@ with open('package.tar.bz2') as f:
         chunk = f.read(next_size)
 
         print(
-            'Uploading ' + str(next_size) + ' bytes at ' + str(f.tell())
+            'Uploading ' + str(next_size) + ' bytes at ' + str(offset)
         )
         r = requests.post(
             girder_url + '/file/chunk',
