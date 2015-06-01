@@ -48,7 +48,8 @@ assert requests.put(
         'prefix': prefix,
         'repo': os.environ.get('TRAVIS_REPO_SLUG'),
         'head': os.environ.get('TRAVIS_COMMIT'),
-        'job_number': os.environ.get('TRAVIS_JOB_NUMBER')
+        'job_number': os.environ.get('TRAVIS_JOB_NUMBER'),
+        'os': os.environ.get('TRAVIS_OS_NAME')
     })
 ).ok
 
