@@ -2,10 +2,17 @@ import os
 import json
 
 import pip
-pip.main(['install', 'requests'])
+pip.main(['install', 'requests', 'PyYAML'])
 
 import requests
+from yaml import load
 
+if os.environ.get('TRAVIS_SECURE_ENV_VARS') == 'false':
+    print('Cannot deploy without secure variables')
+    return
+
+travis = load(open('.travis.yml').read())
+apt = travis.get('addons', {}).get('apt', {}).get('packages', [])
 home = os.path.expanduser('~')
 name = os.environ['name']
 version = os.environ['version']
@@ -13,14 +20,14 @@ url = os.environ['url']
 prefix = os.path.join(home, os.environ['prefix'])
 env = [l.strip() for l in open('env').readlines() if l.strip()]
 
-if os.environ.get('TRAVIS_SECURE_ENV_VARS') == 'false':
-    print('Cannot deploy without secure variables')
-    return
-
 girder_url = os.environ['GIRDER_URL'].rstrip('/')
 girder_user = os.environ['GIRDER_USER']
 girder_password = os.environ['GIRDER_PASSWORD']
 girder_folder = os.environ['GIRDER_FOLDER']
+
+depends = [
+    d.strip() for d in os.environ.get('PACKAGE_DEPENDS', '').split(':') if d.strip()
+]
 
 chunk_size = 1024 * 1024 * 64
 
@@ -49,7 +56,9 @@ assert requests.put(
         'repo': os.environ.get('TRAVIS_REPO_SLUG'),
         'head': os.environ.get('TRAVIS_COMMIT'),
         'job_number': os.environ.get('TRAVIS_JOB_NUMBER'),
-        'os': os.environ.get('TRAVIS_OS_NAME')
+        'os': os.environ.get('TRAVIS_OS_NAME'),
+        'apt': apt,
+        'depends': depends
     })
 ).ok
 
