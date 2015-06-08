@@ -1,11 +1,19 @@
 import os
+import sys
 import json
 
 import pip
-pip.main(['install', 'requests'])
+pip.main(['install', 'requests', 'PyYAML'])
 
 import requests
+from yaml import load
 
+if os.environ.get('TRAVIS_SECURE_ENV_VARS') == 'false':
+    print('Cannot deploy without secure variables')
+    sys.exit(0)
+
+travis = load(open('.travis.yml').read())
+apt = travis.get('addons', {}).get('apt', {}).get('packages', [])
 home = os.path.expanduser('~')
 name = os.environ['name']
 version = os.environ['version']
@@ -17,6 +25,10 @@ girder_url = os.environ['GIRDER_URL'].rstrip('/')
 girder_user = os.environ['GIRDER_USER']
 girder_password = os.environ['GIRDER_PASSWORD']
 girder_folder = os.environ['GIRDER_FOLDER']
+
+depends = [
+    d.strip() for d in os.environ.get('PACKAGE_DEPENDS', '').split(':') if d.strip()
+]
 
 chunk_size = 1024 * 1024 * 64
 
@@ -42,7 +54,12 @@ assert requests.put(
         'version': version,
         'source': url,
         'prefix': prefix,
-        'env': '\n'.join(env)
+        'repo': os.environ.get('TRAVIS_REPO_SLUG'),
+        'head': os.environ.get('TRAVIS_COMMIT'),
+        'job_number': os.environ.get('TRAVIS_JOB_NUMBER'),
+        'os': os.environ.get('TRAVIS_OS_NAME'),
+        'apt': apt,
+        'depends': depends
     })
 ).ok
 
@@ -68,7 +85,7 @@ with open('package.tar.bz2') as f:
         chunk = f.read(next_size)
 
         print(
-            'Uploading ' + str(next_size) + ' bytes at ' + str(f.tell())
+            'Uploading ' + str(next_size) + ' bytes at ' + str(offset)
         )
         r = requests.post(
             girder_url + '/file/chunk',
